@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, FlatList, View} from 'react-native';
 import LinkCard from './LinkCard';
-import {Button, Text} from 'react-native-paper';
+import {Button, Text, ActivityIndicator} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
 const MainPage = () => {
+  const [loading, setLoading] = useState(true);
   const [link, setLink] = useState({});
 
   const loadLinks = async () => {
@@ -30,12 +31,26 @@ const MainPage = () => {
       .doc(id)
       .delete();
     console.log('deleted', id);
-    const newLink = link.filter(x => x.id !== id);
-    setLink(newLink);
   };
 
   useEffect(() => {
-    loadLinks();
+    const subscriber = firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .collection('links')
+      .onSnapshot(querySnapshot => {
+        const links = [];
+        querySnapshot.forEach(documentSnapshot => {
+          links.push({
+            ...documentSnapshot.data(),
+            id: documentSnapshot.id,
+          });
+        });
+        console.log(links);
+        setLink(links);
+        setLoading(false);
+      });
+    return () => subscriber();
   }, []);
   const logout = async () => {
     auth().signOut();
@@ -48,6 +63,10 @@ const MainPage = () => {
       deleteLink={deleteLink(item.id)}
     />
   );
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
   return (
     <View style={styles.container}>
       <View style={styles.header}>
