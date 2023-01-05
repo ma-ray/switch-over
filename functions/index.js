@@ -1,9 +1,11 @@
 const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+admin.initializeApp(functions.config());
 
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+exports.newUser = functions.auth.user().onCreate((user) => {
+  // create new document on firestore
+  return admin.firestore().collection("users").doc(user.uid).set({
+    email: user.email,
+    name: user.displayName,
+  });
+});
