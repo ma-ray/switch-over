@@ -51,20 +51,21 @@ const DATA = [
 const MainPage = () => {
   const [link, setLink] = useState({});
 
+  const loadLinks = async () => {
+    const getLinks = await firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .collection('links')
+      .orderBy('createdAt', 'desc')
+      .get();
+    const links = getLinks.docs.map(x => {
+      return {...x.data(), id: x.id};
+    });
+    console.log(links);
+    setLink(links);
+  };
+
   useEffect(() => {
-    async function loadLinks() {
-      const getLinks = await firestore()
-        .collection('users')
-        .doc(auth().currentUser.uid)
-        .collection('links')
-        .orderBy('createdAt', 'desc')
-        .get();
-      const links = getLinks.docs.map(x => {
-        return {...x.data(), id: x.id};
-      });
-      console.log(links);
-      setLink(links);
-    }
     loadLinks();
   }, []);
   const logout = async () => {
@@ -91,6 +92,11 @@ const MainPage = () => {
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
+        refreshing={false}
+        onRefresh={async () => {
+          console.log('refresh');
+          await loadLinks();
+        }}
       />
     </View>
   );
