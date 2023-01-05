@@ -2,11 +2,12 @@ import React from 'react';
 import {Card, TouchableRipple, Button, Text} from 'react-native-paper';
 import {StyleSheet, Linking} from 'react-native';
 
-const LinkCard = ({title, content, time}) => {
+const LinkCard = ({title, content, time, deleteLink}) => {
   return (
     <Card style={styles.container}>
       <TouchableRipple
-        onPress={() => {
+        onPress={async () => {
+          deleteLink();
           Linking.openURL(content);
           console.log('Pressed');
         }}>
@@ -18,7 +19,9 @@ const LinkCard = ({title, content, time}) => {
       </TouchableRipple>
       <Card.Content style={styles.content}>
         <Text variant="bodyMedium">{time}</Text>
-        <Button mode="contained">Delete</Button>
+        <Button mode="contained" onPress={deleteLink}>
+          Delete
+        </Button>
       </Card.Content>
     </Card>
   );

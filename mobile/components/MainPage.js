@@ -5,49 +5,6 @@ import {Button, Text} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 
-const DATA = [
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '3ac8afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '3ac68af-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '3ac68afc4f8-fbd91aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '3ac68afc97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '3-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '3-48d3-a4f8-fbd91aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-  {
-    id: '391aa97f63',
-    title: 'React Native Paper',
-    content: 'https://reactnativepaper.com/',
-  },
-];
-
 const MainPage = () => {
   const [link, setLink] = useState({});
 
@@ -65,6 +22,18 @@ const MainPage = () => {
     setLink(links);
   };
 
+  const deleteLink = id => async () => {
+    await firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .collection('links')
+      .doc(id)
+      .delete();
+    console.log('deleted', id);
+    const newLink = link.filter(x => x.id !== id);
+    setLink(newLink);
+  };
+
   useEffect(() => {
     loadLinks();
   }, []);
@@ -76,6 +45,7 @@ const MainPage = () => {
       title={item.title}
       content={item.content}
       time={item.createdAt.toDate().toLocaleString()}
+      deleteLink={deleteLink(item.id)}
     />
   );
   return (
