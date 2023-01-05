@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, FlatList, View} from 'react-native';
 import LinkCard from './LinkCard';
 import {Button, Text} from 'react-native-paper';
+import firestore from '@react-native-firebase/firestore';
 
 const DATA = [
   {
@@ -47,6 +48,24 @@ const DATA = [
 ];
 
 const MainPage = ({auth}) => {
+  const [link, setLink] = useState({});
+
+  useEffect(() => {
+    async function loadLinks() {
+      const getLinks = await firestore()
+        .collection('users')
+        .doc(auth().currentUser.uid)
+        .collection('links')
+        .orderBy('createdAt', 'desc')
+        .get();
+      const links = getLinks.docs.map(x => {
+        return {...x.data(), id: x.id};
+      });
+      console.log(links);
+      setLink(links);
+    }
+    loadLinks();
+  }, [auth]);
   const logout = async () => {
     auth().signOut();
   };
@@ -62,7 +81,7 @@ const MainPage = ({auth}) => {
         </Button>
       </View>
       <FlatList
-        data={DATA}
+        data={link}
         renderItem={renderCards}
         keyExtractor={item => item.id}
         showsVerticalScrollIndicator={false}
