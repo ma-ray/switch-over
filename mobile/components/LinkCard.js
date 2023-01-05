@@ -1,8 +1,8 @@
 import React from 'react';
-import {Card, TouchableRipple, Button} from 'react-native-paper';
+import {Card, TouchableRipple, Button, Text} from 'react-native-paper';
 import {StyleSheet, Linking} from 'react-native';
 
-const LinkCard = ({title, content}) => {
+const LinkCard = ({title, content, time}) => {
   return (
     <Card style={styles.container}>
       <TouchableRipple
@@ -16,9 +16,10 @@ const LinkCard = ({title, content}) => {
           titleStyle={styles.title}
         />
       </TouchableRipple>
-      <Card.Actions>
+      <Card.Content style={styles.content}>
+        <Text variant="bodyMedium">{time}</Text>
         <Button mode="contained">Delete</Button>
-      </Card.Actions>
+      </Card.Content>
     </Card>
   );
 };
@@ -34,6 +35,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontWeight: 'bold',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 });
 

@@ -71,13 +71,17 @@ const MainPage = () => {
     auth().signOut();
   };
   const renderCards = ({item}) => (
-    <LinkCard title={item.title} content={item.content} />
+    <LinkCard
+      title={item.title}
+      content={item.content}
+      time={item.createdAt.toDate().toLocaleString()}
+    />
   );
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>SwitchOver</Text>
-        <Button mode="contained-tonal" style={{margin: 10}} onPress={logout}>
+        <Button mode="contained-tonal" onPress={logout}>
           Log Out
         </Button>
       </View>
@@ -100,7 +104,8 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: 5,
+    alignItems: 'center',
+    margin: 10,
   },
   title: {
     color: 'white',
