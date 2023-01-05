@@ -3,6 +3,7 @@ import {StyleSheet, FlatList, View} from 'react-native';
 import LinkCard from './LinkCard';
 import {Button, Text} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 const DATA = [
   {
@@ -47,7 +48,7 @@ const DATA = [
   },
 ];
 
-const MainPage = ({auth}) => {
+const MainPage = () => {
   const [link, setLink] = useState({});
 
   useEffect(() => {
@@ -65,7 +66,7 @@ const MainPage = ({auth}) => {
       setLink(links);
     }
     loadLinks();
-  }, [auth]);
+  }, []);
   const logout = async () => {
     auth().signOut();
   };
