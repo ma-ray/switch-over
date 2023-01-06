@@ -4,6 +4,7 @@ import LinkCard from './LinkCard';
 import {Button, Text, ActivityIndicator} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
 
 const MainPage = () => {
   const [loading, setLoading] = useState(true);
@@ -46,14 +47,21 @@ const MainPage = () => {
             id: documentSnapshot.id,
           });
         });
-        console.log(links);
+        console.log('useEffect', links);
         setLink(links);
         setLoading(false);
       });
     return () => subscriber();
   }, []);
   const logout = async () => {
-    auth().signOut();
+    const token = await messaging().getToken();
+    await firestore()
+      .collection('users')
+      .doc(auth().currentUser.uid)
+      .collection('tokens')
+      .doc(token)
+      .delete();
+    await auth().signOut();
   };
   const renderCards = ({item}) => (
     <LinkCard

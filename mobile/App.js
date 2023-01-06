@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import auth from '@react-native-firebase/auth';
+import messaging from '@react-native-firebase/messaging';
+import firestore from '@react-native-firebase/firestore';
 import LoginPage from './components/LoginPage';
 import MainPage from './components/MainPage';
 
@@ -19,6 +21,22 @@ const App = () => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber;
   });
+
+  useEffect(() => {
+    async function uploadToken() {
+      await messaging().registerDeviceForRemoteMessages();
+      const token = await messaging().getToken();
+      await firestore()
+        .collection('users')
+        .doc(user.uid)
+        .collection('tokens')
+        .doc(token)
+        .set({createdAt: firestore.FieldValue.serverTimestamp()});
+    }
+    if (user) {
+      uploadToken();
+    }
+  }, [user]);
 
   if (initializing) {
     return (
