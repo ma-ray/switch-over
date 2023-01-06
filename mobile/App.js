@@ -28,15 +28,13 @@ const App = () => {
       const token = await messaging().getToken();
       await firestore()
         .collection('users')
-        .doc(user.uid)
+        .doc(auth().currentUser.uid)
         .collection('tokens')
         .doc(token)
         .set({createdAt: firestore.FieldValue.serverTimestamp()});
     }
-    if (user) {
-      uploadToken();
-    }
-  }, [user]);
+    uploadToken();
+  }, []);
 
   if (initializing) {
     return (

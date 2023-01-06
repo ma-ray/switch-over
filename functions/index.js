@@ -19,6 +19,13 @@ exports.addLink = functions.firestore
           .doc(context.params.userId)
           .collection("tokens").get();
 
+      const tokens = tokensRes.docs.map((x) => x.id);
+      functions.logger.log("User tokens", tokens);
+      if (!tokens) {
+        functions.logger.log("User has no devices.");
+        return new Promise(() => {});
+      }
+
       const message = {
         notification: {
           title: newLink.title,
@@ -26,6 +33,5 @@ exports.addLink = functions.firestore
         },
         data: {linkId: context.params.linkId},
       };
-      const tokens = tokensRes.docs.map((x) => x.id);
       return admin.messaging().sendToDevice(tokens, message);
     });

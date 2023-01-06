@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, FlatList, View} from 'react-native';
+import {StyleSheet, FlatList, View, Linking} from 'react-native';
 import LinkCard from './LinkCard';
 import {Button, Text, ActivityIndicator} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
@@ -51,8 +51,42 @@ const MainPage = () => {
         setLink(links);
         setLoading(false);
       });
+
+    messaging().onNotificationOpenedApp(async remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage,
+      );
+
+      Linking.openURL(remoteMessage.notification.body)
+        .then(_ => {
+          return deleteLink(remoteMessage.data.linkId)();
+        })
+        .catch(_ => {
+          console.log('did not open link');
+        });
+    });
+
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage,
+          );
+          Linking.openURL(remoteMessage.notification.body)
+            .then(_ => {
+              return deleteLink(remoteMessage.data.linkId)();
+            })
+            .catch(_ => {
+              console.log('did not open link');
+            });
+        }
+      });
     return () => subscriber();
   }, []);
+
   const logout = async () => {
     const token = await messaging().getToken();
     await firestore()
@@ -63,6 +97,7 @@ const MainPage = () => {
       .delete();
     await auth().signOut();
   };
+
   const renderCards = ({item}) => (
     <LinkCard
       title={item.title}
