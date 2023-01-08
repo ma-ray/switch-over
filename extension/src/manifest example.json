@@ -1,6 +1,6 @@
 {
     "name": "Switch Over",
-    "description": "Send stuff to your phone!",
+    "description": "Send links to your phone.",
     "version": "1.0",
     "manifest_version": 3,
     "background": {
