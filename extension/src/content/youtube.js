@@ -1,4 +1,5 @@
-import urlParser from 'js-video-url-parser';
+import urlParser from 'js-video-url-parser/lib/base';
+import 'js-video-url-parser/lib/provider/youtube';
 
 export const getYoutubeLink = async(id, url) => {
   const parse = urlParser.parse(url);
