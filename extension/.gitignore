@@ -1,0 +1,6 @@
+dist/
+releases/
+node_modules/
+.env
+src/firebase.config.js
+manifest.json

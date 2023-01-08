@@ -1,0 +1,32 @@
+{
+  "name": "switch-over-extension",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^22.0.2",
+    "@rollup/plugin-node-resolve": "^13.3.0",
+    "@types/chrome": "^0.0.206",
+    "eslint": "^8.23.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.2.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.1",
+    "prettier": "2.7.1",
+    "rollup": "^2.79.0",
+    "rollup-plugin-chrome-extension": "^3.6.10"
+  },
+  "dependencies": {
+    "firebase": "^9.9.4",
+    "firebaseui": "^6.0.1",
+    "js-video-url-parser": "^0.5.1"
+  }
+}
