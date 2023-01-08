@@ -63,6 +63,11 @@ const addLink = async(title, content) => {
 
 // clicking the extension
 chrome.action.onClicked.addListener(async(tab) => {
+  if (!auth.currentUser) {
+    chrome.runtime.openOptionsPage();
+    return;
+  }
+
   if (tab.url.startsWith('https://') || tab.url.startsWith('http://')) {
     if (tab.url.startsWith('https://www.youtube.com')) {
       const res = await getYoutubeLink(tab.id, tab.url);
