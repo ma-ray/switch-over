@@ -22,6 +22,12 @@ const db = getFirestore(app);
 // FIREBASE AUTH
 const auth = getAuth(app);
 
+let loading = true;
+
+chrome.runtime.onStartup.addListener(() => {
+  chrome.action.setBadgeText({ text: 'X' });
+});
+
 // listeners for messages
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (message.command === 'sign-in') {
@@ -48,32 +54,35 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
       });
     return true;
   } else if (message.command === 'check-signin') {
-    sendResponse(auth.currentUser);
+    sendResponse(!loading ? auth.currentUser : null);
   }
 });
 
-const addLink = async(title, content) => {
-  return addDoc(collection(db, 'users', auth.currentUser.uid, 'links'), {
-    title,
-    userId: auth.currentUser.uid,
-    content,
-    createdAt: serverTimestamp(),
-  })
-};
+auth.onAuthStateChanged(user => {
+  if (user) {
+    // clicking the extension
+    chrome.action.setBadgeText({ text: '' });
+    loading = false;
+    const addLink = async(title, content) => {
+      return addDoc(collection(db, 'users', auth.currentUser.uid, 'links'), {
+        title,
+        userId: auth.currentUser.uid,
+        content,
+        createdAt: serverTimestamp(),
+      })
+    };
 
-// clicking the extension
-chrome.action.onClicked.addListener(async(tab) => {
-  if (!auth.currentUser) {
-    chrome.runtime.openOptionsPage();
-    return;
-  }
-
-  if (tab.url.startsWith('https://') || tab.url.startsWith('http://')) {
-    if (tab.url.startsWith('https://www.youtube.com')) {
-      const res = await getYoutubeLink(tab.id, tab.url);
-      addLink(tab.title, res ?? tab.url);
-    } else {
-      addLink(tab.title, tab.url);
-    }
+    chrome.action.onClicked.addListener(async(tab) => {
+      if (tab.url.startsWith('https://') || tab.url.startsWith('http://')) {
+        if (tab.url.startsWith('https://www.youtube.com')) {
+          const res = await getYoutubeLink(tab.id, tab.url);
+          addLink(tab.title, res ?? tab.url);
+        } else {
+          addLink(tab.title, tab.url);
+        }
+      }
+    });
+  } else {
+    chrome.action.setBadgeText({ text: 'X' });
   }
 });
