@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 import firestore from '@react-native-firebase/firestore';
@@ -23,6 +24,9 @@ const App = () => {
   });
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     async function uploadToken() {
       await messaging().registerDeviceForRemoteMessages();
       const token = await messaging().getToken();
@@ -34,12 +38,12 @@ const App = () => {
         .set({createdAt: firestore.FieldValue.serverTimestamp()});
     }
     uploadToken();
-  }, []);
+  }, [user]);
 
   if (initializing) {
     return (
       <View style={styles.container}>
-        <Text>Initializing</Text>
+        <ActivityIndicator />
       </View>
     );
   }
