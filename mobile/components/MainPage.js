@@ -17,7 +17,6 @@ const MainPage = () => {
       .collection('links')
       .doc(id)
       .delete();
-    console.log('deleted', id);
   };
 
   useEffect(() => {
@@ -33,41 +32,23 @@ const MainPage = () => {
             id: documentSnapshot.id,
           });
         });
-        console.log('useEffect', links);
         setLink(links);
         setLoading(false);
       });
 
     messaging().onNotificationOpenedApp(async remoteMessage => {
-      console.log(
-        'Notification caused app to open from background state:',
-        remoteMessage,
-      );
-
-      Linking.openURL(remoteMessage.notification.body)
-        .then(_ => {
-          return deleteLink(remoteMessage.data.linkId)();
-        })
-        .catch(_ => {
-          console.log('did not open link');
-        });
+      Linking.openURL(remoteMessage.notification.body).then(_ => {
+        return deleteLink(remoteMessage.data.linkId)();
+      });
     });
 
     messaging()
       .getInitialNotification()
       .then(remoteMessage => {
         if (remoteMessage) {
-          console.log(
-            'Notification caused app to open from quit state:',
-            remoteMessage,
-          );
-          Linking.openURL(remoteMessage.notification.body)
-            .then(_ => {
-              return deleteLink(remoteMessage.data.linkId)();
-            })
-            .catch(_ => {
-              console.log('did not open link');
-            });
+          Linking.openURL(remoteMessage.notification.body).then(_ => {
+            return deleteLink(remoteMessage.data.linkId)();
+          });
         }
       });
     return () => subscriber();

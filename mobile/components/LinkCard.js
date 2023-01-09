@@ -9,7 +9,6 @@ const LinkCard = ({title, content, time, deleteLink}) => {
         onPress={async () => {
           deleteLink();
           Linking.openURL(content);
-          console.log('Pressed');
         }}>
         <Card.Title
           title={title}
