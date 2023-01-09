@@ -45,10 +45,10 @@ const App = () => {
   }
 
   if (!user) {
-    return <LoginPage auth={auth} />;
+    return <LoginPage />;
   }
 
-  return <MainPage auth={auth} />;
+  return <MainPage />;
 };
 
 const styles = StyleSheet.create({

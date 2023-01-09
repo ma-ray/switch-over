@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import auth from '@react-native-firebase/auth';
 import {GOOGLE_SIGNIN} from '@env';
 
 import {
@@ -7,7 +8,7 @@ import {
   GoogleSigninButton,
 } from '@react-native-google-signin/google-signin';
 
-const LoginPage = props => {
+const LoginPage = () => {
   GoogleSignin.configure({
     webClientId: GOOGLE_SIGNIN,
   });
@@ -17,8 +18,8 @@ const LoginPage = props => {
       showPlayServicesUpdateDialog: true,
     });
     const {idToken} = await GoogleSignin.signIn();
-    const googleCred = props.auth.GoogleAuthProvider.credential(idToken);
-    return props.auth().signInWithCredential(googleCred);
+    const googleCred = auth.GoogleAuthProvider.credential(idToken);
+    return auth().signInWithCredential(googleCred);
   };
 
   return (
