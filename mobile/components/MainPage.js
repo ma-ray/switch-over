@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, FlatList, View, Linking} from 'react-native';
+import {StyleSheet, FlatList, View, Linking, Appearance} from 'react-native';
 import LinkCard from './LinkCard';
 import {Button, Text, ActivityIndicator} from 'react-native-paper';
 import firestore from '@react-native-firebase/firestore';
@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   title: {
-    color: 'white',
+    color: Appearance.getColorScheme() === 'light' ? 'black' : 'white',
     fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
