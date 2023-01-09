@@ -4,10 +4,7 @@ import {Button, Text} from 'react-native-paper';
 import auth from '@react-native-firebase/auth';
 import {GOOGLE_SIGNIN} from '@env';
 
-import {
-  GoogleSignin,
-  GoogleSigninButton,
-} from '@react-native-google-signin/google-signin';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 const LoginPage = () => {
   GoogleSignin.configure({
