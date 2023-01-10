@@ -32,6 +32,17 @@ const MainPage = () => {
             id: documentSnapshot.id,
           });
         });
+        links.sort((a, b) => {
+          const timeA = a.createdAt.toDate().getTime();
+          const timeB = b.createdAt.toDate().getTime();
+
+          if (timeA < timeB) {
+            return 1;
+          } else if (timeA > timeB) {
+            return -1;
+          }
+          return 0;
+        });
         setLink(links);
         setLoading(false);
       });
