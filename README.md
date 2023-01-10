@@ -2,6 +2,8 @@
 
 > A way to send links to Android devices
 
+![demo](https://user-images.githubusercontent.com/60418739/211477404-a7482540-71b9-4b66-ba63-f61609d0641a.gif)
+
 ## Usage
 Switch Over is a simple and quick way to send links from your Chrome browser to your Android phone.
 This is done through a Chrome browser extension, Android app, and your Google acccount.
