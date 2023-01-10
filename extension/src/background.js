@@ -26,6 +26,7 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
       GoogleAuthProvider.credential(null, message.token)
     )
       .then((res) => {
+        chrome.storage.local.set({ user: res.user.email });
         sendResponse(res);
       })
       .catch((err) => {
@@ -36,6 +37,7 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   } else if (message.command === 'sign-out') {
     signOut(auth)
       .then(() => {
+        chrome.storage.local.remove('user');
         sendResponse(true);
       })
       .catch((err) => {
@@ -43,10 +45,6 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
         sendResponse(false);
       });
     return true;
-  } else if (message.command === 'check-signin') {
-    auth.onAuthStateChanged(user => {
-      sendResponse(user ? user.email : null);
-    });
   }
 });
 
@@ -56,8 +54,6 @@ const addLink = async(title, content, uid) => {
     userId: uid,
     content,
     createdAt: serverTimestamp(),
-  }).then(() => {
-    console.log('added');
   });
 };
 

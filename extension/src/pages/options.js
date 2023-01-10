@@ -5,11 +5,11 @@ const signoutSection = document.getElementById('signed-out');
 const signinId = document.getElementById('signin-id');
 
 // init
-chrome.runtime.sendMessage({ command: 'check-signin' }, (res) => {
-  if (res) {
+chrome.storage.local.get('user').then(res => {
+  if (res.user) {
     signinSection.style.display = 'block';
     signoutSection.style.display = 'none';
-    signinId.innerHTML = `You are signed in as ${res.email}`;
+    signinId.innerHTML = `You are signed in as ${res.user}`;
   } else {
     signinSection.style.display = 'none';
     signoutSection.style.display = 'block';
