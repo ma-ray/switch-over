@@ -17,5 +17,6 @@ yarn android
 
 ### Environment Setup
 
-Get the  `google-services.json` from creating an Android app in the Firebase project  and place it in `android/app/`.
+Get the  `google-services.json` from creating an Android app in a Firebase project and place it in `android/app/`.
 
+Create a '.env' file with the OAuth Client to allow Google Login with the app.
