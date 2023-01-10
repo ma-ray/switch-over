@@ -14,11 +14,7 @@ This could be used as kind of mobile bookmarks, but the purpose of this project 
 
 ### Chrome Extension 
 #### Installation
-Head to the releases page to download the latest version.
-
-In Chrome, head to the extensions page `chrome://extensions/` and enable Developer mode on the top right.
-
-Press `Load unpacked` and select the folder extracted from the downloaded zip file.
+Head to the [extension folder](./extension) for instructions on how to build.
 
 #### Usage
 After sucessfully installing the extension, head over to the options page and sign in with your Google account to start sending links.
@@ -27,6 +23,8 @@ On any webpage, pressing the extension's icon from the toolbar will store the li
 
 ### Mobile App
 > **To get notified of new links, head to Android settings and enable notifications.**
+
+Head to the [mobile folder](./mobile/) to see instructions on how to build the app.
 
 After signing in, you will see a list of currently stored links recieved from the browser that changes in real time.
 Tapping on any item, will open the link on your phone's browser and will be swiftly removed from your account.
