@@ -1,6 +1,8 @@
 import urlParser from 'js-video-url-parser/lib/base';
 import 'js-video-url-parser/lib/provider/youtube';
 
+// Gets the YouTube video ID and current timestamp of the video if applicable.
+// Returns the link of the video that starts at the timestamp.
 export const getYoutubeLink = async(id, url) => {
   const parse = urlParser.parse(url);
   if (!parse || parse.mediaType !== 'video') {

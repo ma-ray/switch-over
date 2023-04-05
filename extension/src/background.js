@@ -18,7 +18,7 @@ const app = initializeApp(FIREBASE_CONFIG);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// listeners for messages
+// Message listeners to sign-in and sign-out of Firebase from options page.
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (message.command === 'sign-in') {
     signInWithCredential(
@@ -48,6 +48,7 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   }
 });
 
+// Create a new link document for the user.
 const addLink = async(title, content, uid) => {
   addDoc(collection(db, 'users', uid, 'links'), {
     title,
@@ -57,6 +58,7 @@ const addLink = async(title, content, uid) => {
   });
 };
 
+// On click extension button listener. Extract the URL of the current tab.
 chrome.action.onClicked.addListener(async(tab) => {
   auth.onAuthStateChanged(async user => {
     if (tab.url.startsWith('https://') || tab.url.startsWith('http://')) {

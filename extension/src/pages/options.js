@@ -4,7 +4,7 @@ const signinSection = document.getElementById('signed-in');
 const signoutSection = document.getElementById('signed-out');
 const signinId = document.getElementById('signin-id');
 
-// init
+// Check if the user is logged in through local storage.
 chrome.storage.local.get('user').then(res => {
   if (res.user) {
     signinSection.style.display = 'block';
@@ -16,6 +16,7 @@ chrome.storage.local.get('user').then(res => {
   }
 });
 
+// Sign-in to Firebase through using the Google account signed in to Chrome.
 signinbtn.onclick = (e) => {
   e.preventDefault();
   chrome.identity.getAuthToken({ interactive: true }, token => {
@@ -30,6 +31,7 @@ signinbtn.onclick = (e) => {
   });
 };
 
+// Log out of Switch Over
 signoutbtn.onclick = (e) => {
   e.preventDefault();
   chrome.runtime.sendMessage({ command: 'sign-out' }, (res) => {
