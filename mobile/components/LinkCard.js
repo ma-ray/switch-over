@@ -2,6 +2,7 @@ import React from 'react';
 import {Card, TouchableRipple, Button, Text} from 'react-native-paper';
 import {StyleSheet, Linking} from 'react-native';
 
+// Component to display a user's link
 const LinkCard = ({title, content, time, deleteLink}) => {
   return (
     <Card style={styles.container}>

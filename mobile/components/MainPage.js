@@ -6,10 +6,12 @@ import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
 import messaging from '@react-native-firebase/messaging';
 
+// Main page for Switch Over
 const MainPage = () => {
   const [loading, setLoading] = useState(true);
   const [link, setLink] = useState({});
 
+  // Delete the link from the user's account
   const deleteLink = id => async () => {
     await firestore()
       .collection('users')
@@ -26,12 +28,16 @@ const MainPage = () => {
       .collection('links')
       .onSnapshot(querySnapshot => {
         const links = [];
+
+        // Configure data for LinkCard
         querySnapshot.forEach(documentSnapshot => {
           links.push({
             ...documentSnapshot.data(),
             id: documentSnapshot.id,
           });
         });
+
+        // Sort by latest
         links.sort((a, b) => {
           const timeA = a.createdAt.toDate().getTime();
           const timeB = b.createdAt.toDate().getTime();
@@ -47,6 +53,7 @@ const MainPage = () => {
         setLoading(false);
       });
 
+    // Setup notifications for quit state and background state
     messaging().onNotificationOpenedApp(async remoteMessage => {
       Linking.openURL(remoteMessage.notification.body).then(_ => {
         return deleteLink(remoteMessage.data.linkId)();
@@ -65,6 +72,7 @@ const MainPage = () => {
     return () => subscriber();
   }, []);
 
+  // Logout of the app. Deletes the device token from user.
   const logout = async () => {
     const token = await messaging().getToken();
     await firestore()

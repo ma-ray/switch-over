@@ -6,11 +6,13 @@ import {GOOGLE_SIGNIN} from '@env';
 
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
+// Login page for Switch Over
 const LoginPage = () => {
   GoogleSignin.configure({
     webClientId: GOOGLE_SIGNIN,
   });
 
+  // Sign-in to through Google
   const signIn = async () => {
     await GoogleSignin.hasPlayServices({
       showPlayServicesUpdateDialog: true,
